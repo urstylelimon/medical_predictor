@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 20px;
+        }
+
+        .no-result {
+            color: #dc3545;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+
+        <form method="post" action="{% url 'predict' %}">
+            {% csrf_token %}
+            <label for="rawtext">Enter Text:</label>
+            <textarea id="rawtext" name="rawtext" rows="4" cols="50" required></textarea><br>
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if rawtext %}
+            <p><strong>User Input:</strong> {{ rawtext }}</p>
+        {% else %}
+            <p class="no-result">No text input</p>
+        {% endif %}
+
+        {% if result is not None %}
+            <p class="result"><strong>Prediction:</strong> {{ result }}</p>
+        {% else %}
+            <p class="no-result">No prediction available</p>
+        {% endif %}
+    </div>
+</body>
+</html>
