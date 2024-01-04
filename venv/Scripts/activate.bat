@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\limon\OneDrive\Desktop\Swarna\medical_predictor\venv
+set VIRTUAL_ENV=C:\Users\mhlim\Downloads\Telegram Desktop\pytorch-chatbot-master\medical_predictor\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

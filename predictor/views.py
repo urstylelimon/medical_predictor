@@ -45,14 +45,45 @@ def review_to_words(raw_review):
     # 7. Space join words
     return ' '.join(lemmatize_words)
 
+# def predict(request):
+#     raw_text = ""  # Default value
+#     if request.method == 'POST':
+#         raw_text = request.POST.get('rawtext', '')
+#
+#         if raw_text:
+#             clean_text = review_to_words(raw_text)
+#             tfidf_input = vectorizer.transform([clean_text])
+#             prediction = model.predict(tfidf_input)
+#
+#             return render(request, 'predict.html', {'rawtext': raw_text, 'result': prediction[0]})
+#         else:
+#             raw_text = "There is no text to select"
+#
+#     return render(request, 'predict.html', {'rawtext': raw_text, 'result': None})
+
 def predict(request):
     raw_text = ""  # Default value
     if request.method == 'POST':
         raw_text = request.POST.get('rawtext', '')
 
         if raw_text:
+            # Text preprocessing
             clean_text = review_to_words(raw_text)
+            print(clean_text)
+
+            # Check the number of words in the input
+            if len(clean_text.split()) < 3:
+                return render(request, 'predict.html', {'rawtext': raw_text, 'result': "We need more information about your problem."})
+
+            # Transform text using the TF-IDF vectorizer
             tfidf_input = vectorizer.transform([clean_text])
+
+            # Check the model's confidence score
+            confidence_score = max(model.decision_function(tfidf_input)[0])
+            if confidence_score < 0.7:
+                return render(request, 'predict.html', {'rawtext': raw_text, 'result': " Wrong input ! Please tell me your disease."})
+
+            # Make a prediction using the model
             prediction = model.predict(tfidf_input)
 
             return render(request, 'predict.html', {'rawtext': raw_text, 'result': prediction[0]})
